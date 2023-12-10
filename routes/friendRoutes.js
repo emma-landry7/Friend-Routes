@@ -22,19 +22,24 @@ router.get('/', (req, res) => {
 router.get('/filter', (req, res) => {
     console.log(req.query)
     let filterGender = req.query.gender;
+    let filterLetter = req.query.letter;
     let matchingFriends = [...friends];
 
     if (filterGender) {
         matchingFriends = matchingFriends.filter(friend => friend.gender == filterGender);
     }
-    
+
+    if (filterLetter) {
+        matchingFriends = matchingFriends.filter(friend => friend.name.charAt(0) === filterLetter);
+    }
+
     if (matchingFriends.length > 0) {
         // return valid data when the gender matches 
         res.status(200).json(matchingFriends)
     } else {
         // and an error response when there are no matches
         res.status(404).json({error: "No friends matching gender "+filterGender})
-    }  
+    }
 })
 
 // 2. Get information about this request from the headers
