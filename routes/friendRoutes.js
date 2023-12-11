@@ -46,7 +46,7 @@ router.get('/filter', (req, res) => {
 router.get('/info', (req, res) => {
     console.log(req.headers)
     console.log(req.headers["user-agent"])
-    
+
 
     // Modify this response to just return info on the user-agent, content-type and accept headers
     // res.json(req.headers)  
@@ -57,12 +57,18 @@ router.get('/info', (req, res) => {
 // 3. Dynamic request param endpoint - get the friend matching the specific ID ie. /friends/3
 router.get('/:id', (req, res) => {
     console.log(req.params)
-    let friendId = req.params.id; // 'id' here will be a value matching anything after the / in the request path
-
+    let friendId = parseInt(req.params.id); // 'id' here will be a value matching anything after the / in the request path
+    let friend = friends.find(friend => friend.id === friendId)
     // Modify this function to find and return the friend matching the given ID, or a 404 if not found
 
     // Modify this response with the matched friend, or a 404 if not found
-    res.json({result: 'Finding friend with ID ' + friendId})
+    if (friend) {
+        res.status(200).json({result: 'Finding friend with ID ' + friendId + ": " + friend.name})
+    } else {
+        res.status(404).json({error: "No friends matching id " + friendId})
+    }
+    
+    
 })
 
 // a POST request with data sent in the body of the request, representing a new friend to add to our list
